@@ -1,4 +1,4 @@
-$(function(){
+//$(function(){
     "use strict";
 
     /* ==========================================================================
@@ -27,13 +27,14 @@ $(function(){
     /* ==========================================================================
      Яндекс Карты
      ========================================================================== */
+    var myMap;
     function init() {
-        var myMap = new ymaps.Map('map', {
+        myMap = new ymaps.Map('map', {
                 center: [59.918154, 30.305578],
                 zoom: 11,
                 controls: []
-            }),
-            myPlacemark;
+            });
+        var myPlacemark;
 
 //        ymaps.route([
 //                'Невский проспект, 12, Санкт-Петербург, Россия',
@@ -163,7 +164,6 @@ $(function(){
          myMap.controls.add(buttonEditor);
          */
 
-        insertAddress.bind({ymaps: ymaps, map: myMap});
     }
 
     ymaps.ready(init);
@@ -189,7 +189,7 @@ $(function(){
     };
 
     $('.js-start-input, .js-finish-input').keyup(suggestAddress);
-});
+//});
 
 var $suggestInputField;
 var insertAddress = function(data) {
@@ -198,33 +198,24 @@ var insertAddress = function(data) {
     var items = data[1];
     $ul.empty();
     $container.show();
-    var ymaps = this.ymaps;
-    var map = this.map;
+    var $el;
     for (var i = 0, l = items.length; i < l; i++) {
         $el = $('<li>' + items[i][1] + '</li>');
         $el.click(function(){
             $suggestInputField.val($(this).text());
             $container.hide();
 
-
             var firstPoint, secondPoint;
             if ($suggestInputField.hasClass('js-start-input')) {
                 firstPoint = $suggestInputField.val();
                 secondPoint = $('.js-finish-input').val();
             } else {
-                firstPoint  = $('.js-finish-input').val();
+                firstPoint  = $('.js-start-input').val();
                 secondPoint = $suggestInputField.val();
             }
             if (firstPoint && secondPoint) {
-                debugger;
-                ymaps.route([
-                    firstPoint,
-                    {type: "wayPoint", point: firstPoint},
-                    secondPoint,
-                    {type:"wayPoint", point: secondPoint}
-                ]).then(function(route){
-                    debugger;
-                    map.geoObjects.add(route);
+                ymaps.route([firstPoint, secondPoint]).then(function(route){
+                    myMap.geoObjects.add(route);
                     var distance = Math.round(route.getLength() / 1000);
                     $('.js-distance').html(distance);
                     $('.js-price').html(180 + distance * 25);
@@ -237,17 +228,6 @@ var insertAddress = function(data) {
 
                     console.log( points.get(0) );
                 });
-//                var distance = Math.round(route.getLength() / 1000);
-//                $('.js-distance').html(distance);
-//                $('.js-price').html(180 + distance * 25);
-//
-//                var points = route.getWayPoints(),
-//                    lastPoint = points.getLength() - 1;
-//
-//                points.get(0).properties.set('iconContent', 'Точка отправления');
-//                points.get(lastPoint).properties.set('iconContent', 'Точка прибытия');
-//
-//                console.log( points.get(0) );
             }
         });
         $ul.append($el);
