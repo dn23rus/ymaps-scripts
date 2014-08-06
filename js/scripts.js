@@ -169,12 +169,18 @@
     ymaps.ready(init);
 
     var suggestAddress = function(e) {
-
         var $thisEl = $(this);
         $suggestInputField = $thisEl;
+
+        if (e.which == 13) {
+            $('.js-suggest-address-items').hide();
+            insertAddress($thisEl.val());
+            return;
+        }
+
         var url = 'http://suggest-maps.yandex.ru/suggest-geo';
         var data = {
-            callback: 'insertAddress',
+            callback: 'showAddresses',
             lang: 'ru-RU',
             search_type: 'all',
             ll: '30.52055093073688,59.95261099684442',
@@ -192,7 +198,8 @@
 //});
 
 var $suggestInputField;
-var insertAddress = function(data) {
+
+var showAddresses = function(data) {
     var $container = $('.js-suggest-address-items');
     var $ul = $('.js-suggest-address-items > ul');
     var items = data[1];
@@ -202,22 +209,25 @@ var insertAddress = function(data) {
     for (var i = 0, l = items.length; i < l; i++) {
         $el = $('<li>' + items[i][1] + '</li>');
         $el.click(function(){
-            $suggestInputField.val($(this).text());
+            insertAddress($(this).text());
             $container.hide();
-
-            var firstPoint, secondPoint;
-            if ($suggestInputField.hasClass('js-start-input')) {
-                firstPoint = $suggestInputField.val();
-                secondPoint = $('.js-finish-input').val();
-            } else {
-                firstPoint  = $('.js-start-input').val();
-                secondPoint = $suggestInputField.val();
-            }
-            if (firstPoint && secondPoint) {
-                buildRoute(firstPoint, secondPoint);
-            }
         });
         $ul.append($el);
+    }
+};
+
+var insertAddress = function(data) {
+    $suggestInputField.val(data);
+    var firstPoint, secondPoint;
+    if ($suggestInputField.hasClass('js-start-input')) {
+        firstPoint = $suggestInputField.val();
+        secondPoint = $('.js-finish-input').val();
+    } else {
+        firstPoint  = $('.js-start-input').val();
+        secondPoint = $suggestInputField.val();
+    }
+    if (firstPoint && secondPoint) {
+        buildRoute(firstPoint, secondPoint);
     }
 };
 
@@ -225,18 +235,19 @@ var buildRoute = function(from, to) {
     ymaps.route([from, to]).then(function(route){
         myMap.geoObjects.removeAll();
         myMap.geoObjects.add(route);
+        route.editor.start();
+        route.editor.events.add('routeupdate', function (e) {
 
+            var distance = Math.round(route.getLength() / 1000);
+            $('.js-distance').html(distance);
+            $('.js-price').html(180 + distance * 25);
 
-        var distance = Math.round(route.getLength() / 1000);
-        $('.js-distance').html(distance);
-        $('.js-price').html(180 + distance * 25);
+            var points = route.getWayPoints(),
+                lastPoint = points.getLength() - 1;
 
-        var points = route.getWayPoints(),
-            lastPoint = points.getLength() - 1;
-
-        points.get(0).properties.set('iconContent', 'Точка отправления');
-        points.get(lastPoint).properties.set('iconContent', 'Точка прибытия');
-
-        console.log( points.get(0) );
+            points.get(0).properties.set('iconContent', 'Точка отправления');
+            points.get(lastPoint).properties.set('iconContent', 'Точка прибытия');
+//            console.log( points.get(0) );
+        });
     });
 };
