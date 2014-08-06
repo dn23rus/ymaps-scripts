@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!--<script src="//api-maps.yandex.ru/2.1.11/?lang=ru_RU" type="text/javascript"></script>-->
+    <script src="http://api-maps.yandex.ru/2.1.11/?lang=ru_RU" type="text/javascript"></script>
+</head>
+<body>
+
+<div class="site">
+
+    <div class="bg">
+        <div class="container">
+            <div class="logo"><img src="images/logotype.png" alt=""></div>
+            <div class="free">Свободно:   24   водителя</div>
+            <div class="phone">Заказ такси по телефону:<br>(812) 398-29-16</div>
+            <div class="form">
+                <div class="form__title">
+                    ЗАКАЗ ТАКСИ ОНЛАЙН
+                </div>
+                <div class="form__box">
+                    <div class="form-group">
+                        <input name="fio" class="form-control" type="text" placeholder="Фамилия Имя">
+                    </div>
+                    <div class="form-group">
+                        <input name="phone" class="form-control" type="text" placeholder="Телефон">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="start"><span class="start-icon"></span> Откуда:</label>
+                        <input name="start" class="form-control js-start-input" type="text" id="start">
+                    </div>
+                    <div class="form-group">
+                        <label for="finish"><span class="finish-icon"></span> Куда:</label>
+                        <input name="finish" class="form-control js-finish-input" type="text" id="finish">
+                    </div>
+
+                    <div class="form-group form-datetime">
+                        <label for="date">Когда и во сколько:</label>
+                        <div class="row">
+                            <div class="col-xs-7"><input name="date" class="form-control" type="text" id="date"></div>
+                            <div class="col-xs-5">
+                                <input name="time" class="form-control" type="time">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="price-box">
+                        Стоимость: <strong class="price js-price">0</strong> <span class="rub">руб.</span> <small class="distance">~ <span class="js-distance">0</span> км.</small>
+                        <!-- 180 + 25 руб за км -->
+                    </div>
+
+                    <input name="submit" class="btn btn-green btn-block" type="submit" value="Оставить заявку">
+                </div>
+            </div>
+            <div class="map" id="map"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-8">
+                <h1>Такси в Санкт-Петербурге</h1>
+                <p>Ежедневные поездки для многих жителей Санкт-Петербурга являются постоянной и острой необходимостью. Добраться до места назначения – быстро, без опозданий и точно в срок – Вам поможет такси «Семёрочка»! Среди множества компаний, оказывающих услуги такси в Санкт-Петербурге, «Семёрочка» порадует Вас не только оперативностью выполненной работы, повышенным комфортом и безопасностью своих клиентов, но и приятными ценами.</p>
+                <p>Заботясь о Вашем времени и нервах, операторы нашей компании четко укажут время прибытия автомобиля. На нашем такси даже в Питере, славящемся своими пробками, Вы без опозданий сможете попасть в аэропорт, на вокзал, в офис на важную деловую встречу – или же на романтическое свидание, что также не терпит отлагательств. Наш автопарк такси в СПб представлен исключительно новыми иномарками в отличном состоянии, а опытные диспетчеры всегда располагают достоверной информацией о дорожной обстановке в городе.</p>
+                <p>Заказать такси «Семёрочка» Вы можете не только по телефону, но и с сайта с помощью формы заказа через Интернет. Каждому клиенту уделяется максимум внимания, и все Ваши пожелания будут приняты к сведению.</p>
+            </div>
+            <div class="col-xs-4">
+                <p class="h1">Почему мы?</p>
+            </div>
+        </div>
+    </div>
+
+</div><!--.site-->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- Pickaday -->
+    <script src="js/moment.js"></script>
+    <script src="js/pickaday.js"></script>
+    <!-- Scripts -->
+    <script src="js/scripts.js"></script>
+
+<div class="suggest-address-items js-suggest-address-items">
+    <ul></ul>
+</div>
+
+<div id="scriptContainer"></div>
+</body>
+</html>
