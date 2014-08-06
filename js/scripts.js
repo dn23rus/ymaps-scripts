@@ -214,22 +214,29 @@ var insertAddress = function(data) {
                 secondPoint = $suggestInputField.val();
             }
             if (firstPoint && secondPoint) {
-                ymaps.route([firstPoint, secondPoint]).then(function(route){
-                    myMap.geoObjects.add(route);
-                    var distance = Math.round(route.getLength() / 1000);
-                    $('.js-distance').html(distance);
-                    $('.js-price').html(180 + distance * 25);
-
-                    var points = route.getWayPoints(),
-                        lastPoint = points.getLength() - 1;
-
-                    points.get(0).properties.set('iconContent', 'Точка отправления');
-                    points.get(lastPoint).properties.set('iconContent', 'Точка прибытия');
-
-                    console.log( points.get(0) );
-                });
+                buildRoute(firstPoint, secondPoint);
             }
         });
         $ul.append($el);
     }
+};
+
+var buildRoute = function(from, to) {
+    ymaps.route([from, to]).then(function(route){
+        myMap.geoObjects.removeAll();
+        myMap.geoObjects.add(route);
+
+
+        var distance = Math.round(route.getLength() / 1000);
+        $('.js-distance').html(distance);
+        $('.js-price').html(180 + distance * 25);
+
+        var points = route.getWayPoints(),
+            lastPoint = points.getLength() - 1;
+
+        points.get(0).properties.set('iconContent', 'Точка отправления');
+        points.get(lastPoint).properties.set('iconContent', 'Точка прибытия');
+
+        console.log( points.get(0) );
+    });
 };
